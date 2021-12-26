@@ -3,7 +3,7 @@ const cheerio = require('cheerio').default
 const express = require('express')
 const puppeteer = require('puppeteer');
 const app = express()
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT || 8080
 app.get('/', (req, res) => {
   console.log("Check Alpha");
 (async () => {
