@@ -12,6 +12,8 @@ app.get('/', (req, res) => {
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
     await page.goto('https://www.jwst.nasa.gov/content/webbLaunch/whereIsWebb.html');
+    await page.setViewport({ width: 1200, height: 800 })
+    await autoScroll(page)
     await page.waitForSelector('#milesEarth', { timeout: 5000 });
 
     const body = await page.evaluate(() => {
@@ -49,3 +51,21 @@ app.get('/', (req, res) => {
 app.listen(PORT, () => {
     console.log("PORT UP")
 })
+async function autoScroll(page){
+    await page.evaluate(async () => {
+        await new Promise((resolve, reject) => {
+            var totalHeight = 0;
+            var distance = 100;
+            var timer = setInterval(() => {
+                var scrollHeight = document.body.scrollHeight;
+                window.scrollBy(0, distance);
+                totalHeight += distance;
+
+                if(totalHeight >= scrollHeight){
+                    clearInterval(timer);
+                    resolve();
+                }
+            }, 100);
+        });
+    });
+}
